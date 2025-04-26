@@ -30,11 +30,11 @@ int virus_count = 0;        // initializing global var virus count to zero
 Virus *create_virus(const char *name); // function to create a new virus
 Virus *find_virus(const char *name);   // function to find an existing virus
 void process_record(char *citizen_id, char *first_name, char *last_name, char *country,
-                    int age, char *virus_name, char *vaccinated, char *date);  // function to process a new vaccination record
-void load_records(const char *filename);                                       // function to load vaccination records from a file
-void check_vaccination_status(const char *citizen_id, const char *virus_name); // function to check vaccination status
-void list_vaccinated(const char *virus_name);                                  // function to list all vaccination records for a given virus
-void run();                                                                    // function to enable user interaction
+                    int age, char *virus_name, char *vaccinated, char *date); // function to process a new vaccination record
+void load_records(const char *filename);                                      // function to load vaccination records from a file
+void check_vaccination_status(char *citizen_id, const char *virus_name);      // function to check vaccination status
+void list_vaccinated(const char *virus_name);                                 // function to list all vaccination records for a given virus
+void run();                                                                   // function to enable user interaction
 
 // driver function
 int main(int argc, char *argv[])
@@ -56,8 +56,8 @@ int main(int argc, char *argv[])
    for (int i = 0; i < virus_count; i++)
    {
       free(viruses[i].name);
-      bloom_filter_destroy(viruses[i].bloom);
-      skip_list_destroy(viruses[i].skip_list);
+      bloom_delete(viruses[i].bloom);
+      list_delete(viruses[i].skip_list);
    }
 
    return 0;
@@ -98,12 +98,12 @@ void process_record(char *citizen_id, char *first_name, char *last_name,
                     char *country, int age, char *virus_name, char *vaccinated,
                     char *date)
 {
-   Virus *virus;
+   Virus *virus = find_virus(virus_name);
 
    // create virus if it does not already exist
-   if ((virus = find_virus) == NULL)
+   if (virus == NULL)
    {
-      create_virus(virus_name);
+      virus = create_virus(virus_name);
    }
 
    // if virus is not created for some reason...
@@ -167,7 +167,7 @@ void load_records(const char *filename)
 }
 
 // implementing check_vaccination_status(...) to check if a citizen is vaccinated for the given virus
-void check_vaccination_status(const char *citizen_id, const char *virus_name)
+void check_vaccination_status(char *citizen_id, const char *virus_name)
 {
    // loop through all viruses
    for (int i = 0; i < virus_count; i++)
@@ -234,8 +234,8 @@ void list_vaccinated(const char *virus_name)
 
 void run()
 {
-   printf("Vaccination Records Management System\n");
-   printf("Commands:\n");
+   printf("\nVaccination Records Management System\n");
+   printf("\nCommands:\n");
    printf("\tcheck <citizen_id> <virus>\n");
    printf("\tlist <virus>\n");
    printf("\texit\n");
@@ -245,7 +245,7 @@ void run()
    // keep running until user exits
    while (1)
    {
-      printf("> ");
+      printf("\n> ");
 
       //
       if (scanf("%s", command) != 1)
