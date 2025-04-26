@@ -163,17 +163,26 @@ Node *list_insert(SkipList *list, char *citizen_id, char *first_name,
 
    if (current != NULL && strcmp(current->citizen_id, citizen_id) == 0)
    {
-      return NULL; // found duplicate
+      return NULL; // found duplicate, exit with failure
    }
 
+   // get a random level for the new node
    int new_level = random_level(list->max_level);
+
+   // if the random level for the new node is higher than the
+   // current highest level of the list, update the list level
    if (new_level > list->level)
    {
+      // update the head nodes on each new level
       for (int i = list->level + 1; i <= new_level; i++)
+      {
          update[i] = list->head;
-      list->level = new_level;
+      }
+
+      list->level = new_level; // set new list level
    }
 
+   // allocating memory for the new node and filling in given data
    Node *new_node = malloc(sizeof(Node));
    new_node->citizen_id = strdup(citizen_id);
    new_node->first_name = strdup(first_name);
@@ -183,8 +192,18 @@ Node *list_insert(SkipList *list, char *citizen_id, char *first_name,
    new_node->virus_name = strdup(virus_name);
    new_node->vaccinated = strdup(vaccinated);
    new_node->date = date ? strdup(date) : NULL;
+
+   // allocating space for next nodes according to the new level
    new_node->next = malloc(sizeof(Node *) * (new_level + 1));
 
+   // checking for memory allocation errors
+   if (new_node->next == NULL)
+   {
+      printf("Error while allocating memory");
+      return NULL; // exit with failure
+   }
+
+   // linking the new node to each level using the update[] array
    for (int i = 0; i <= new_level; i++)
    {
       new_node->next[i] = update[i]->next[i];
@@ -194,28 +213,54 @@ Node *list_insert(SkipList *list, char *citizen_id, char *first_name,
    return new_node;
 }
 
+// implementing list_search(...) to search for records in the skip list
 Node *list_search(SkipList *list, char *citizen_id)
 {
-   Node *current = list->head;
+   Node *current = list->head; // start at the head of the list
 
+   // go through the levels starting from the highest level
    for (int i = list->level; i >= 0; i--)
    {
+      // continue as long as there is a node ahead and its ID is less than the current node
       while (current->next[i] != NULL &&
              strcmp(current->next[i]->citizen_id, citizen_id) < 0)
-         current = current->next[i];
+      {
+         current = current->next[i]; // move to next node
+      }
    }
 
+   // move to the next node (because we stop at the node that has ID strictly less than the next node)
    current = current->next[0];
 
+   // check if the ID matches
    if (current != NULL && strcmp(current->citizen_id, citizen_id) == 0)
-      return current;
+   {
+      return current; // return current node if ID matches
+   }
 
-   return NULL;
+   return NULL; // return NULL if ID does not match
 }
 
 void list_print(SkipList *list)
 {
-   printf("Skip List (Level %d):\n", list->level);
+   printf("Skip List (%d levels):\n\n", list->level);
+
+   // to print top-down starting from the highest level
+   for (int i = list->level; i >= 0; i--)
+   {
+      Node *current = list->head->next[i]; // start at the first node at level i
+      printf("Level %d: ", i);
+      // continue while there is a node at position 'current'
+      while (current != NULL)
+      {
+         printf("%s -> ", current->citizen_id);
+         current = current->next[i]; // move to next node
+      }
+      printf("NULL\n"); // point to NULL after last node
+   }
+
+   // to print starting from level 0
+   /*
    for (int i = 0; i <= list->level; i++)
    {
       Node *node = list->head->next[i];
@@ -227,4 +272,5 @@ void list_print(SkipList *list)
       }
       printf("NULL\n");
    }
+   */
 }
