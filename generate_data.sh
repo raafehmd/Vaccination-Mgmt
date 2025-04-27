@@ -4,7 +4,7 @@
 FIRST_NAMES=("John" "Mary" "Michael" "William" "David" "Susan" "Paul")
 LAST_NAMES=("Smith" "Johnson" "Williams" "Jones" "Davis" "Wilson" "Miller")
 COUNTRIES=("USA" "UK" "Canada" "Australia" "Spain" "Japan" "China" "India" "Ethiopia")
-VIRUSES=("COVID-19" "Influenza" "Measles" "Polio" "Rabies" "Cholera" "Malaria" "Yellofever" "HepatitisB")
+VIRUSES=("COVID-19" "Influenza" "Measles" "Polio" "Rabies" "Cholera" "Malaria" "Yellowfever" "HepatitisB")
 
 # number of records to generate
 NUM_RECORDS=500
