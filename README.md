@@ -52,7 +52,7 @@ A C program for managing vaccination records using **Bloom Filters** and **Skip 
 
 -  Space-efficient probabilistic structure
 -  Fast "possibly in set" checks
--  Configured with 2 hash functions
+-  Configured with 3 hash functions
 
 ### Skip List
 
