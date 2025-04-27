@@ -1,48 +1,53 @@
 #!/bin/bash
 
-# Define sample data
-FIRST_NAMES=("John" "Mary" "Robert" "Jennifer" "Michael" "Linda" "William" "Elizabeth" "David" "Susan")
-LAST_NAMES=("Smith" "Johnson" "Williams" "Brown" "Jones" "Miller" "Davis" "Garcia" "Rodriguez" "Wilson")
-COUNTRIES=("USA" "UK" "Canada" "Australia" "Germany" "France" "Italy" "Spain" "Japan" "China")
-VIRUSES=("COVID-19" "Influenza" "HepatitisB" "Measles" "Polio" "Rabies" "YellowFever" "HPV" "Cholera" "Malaria")
+# defining sample data
+FIRST_NAMES=("John" "Mary" "Michael" "William" "David" "Susan" "Paul")
+LAST_NAMES=("Smith" "Johnson" "Williams" "Jones" "Davis" "Wilson" "Miller")
+COUNTRIES=("USA" "UK" "Canada" "Australia" "Spain" "Japan" "China" "India" "Ethiopia")
+VIRUSES=("COVID-19" "Influenza" "Measles" "Polio" "Rabies" "Cholera" "Malaria" "Yellofever" "HepatitisB")
 
-# Number of records to generate
-NUM_RECORDS=1000
+# number of records to generate
+NUM_RECORDS=500
 
-# Output file
+# output file
 OUTPUT_FILE="inputRecords.txt"
 
-# Clear the output file
+# emptying the output file before writing new data into it
 > "$OUTPUT_FILE"
 
 for ((i=1; i<=NUM_RECORDS; i++)); do
-    # Generate random citizen ID
-    citizen_id=$((10000 + RANDOM % 90000))
+    # generating a random four-digit citizen ID between 1000 & 9999
+    # using bash's in-built 'RANDOM'
+    citizen_id=$((1000 + RANDOM % 9000))
     
-    # Select random names and country
+    # selecting random names and country from pre-defined data
     first_name=${FIRST_NAMES[$RANDOM % ${#FIRST_NAMES[@]}]}
     last_name=${LAST_NAMES[$RANDOM % ${#LAST_NAMES[@]}]}
     country=${COUNTRIES[$RANDOM % ${#COUNTRIES[@]}]}
     
-    # Random age between 1 and 100
+    # generating a random age between 1 and 100
     age=$((1 + RANDOM % 100))
     
-    # Select random virus
+    # selecting a random virus from pre-defined data
     virus=${VIRUSES[$RANDOM % ${#VIRUSES[@]}]}
     
-    # 70% chance of being vaccinated
+    # setting a 70% chance of being vaccinated
     if (( RANDOM % 100 < 70 )); then
         vaccinated="YES"
-        # Generate random date in YYYY-MM-DD format
-        year=$((2010 + RANDOM % 14))
+        # generating a random date in YYYY-MM-DD format
+        year=$((2005 + RANDOM % 14)) # random year between 2005 and 2024
         month=$((1 + RANDOM % 12))
+        # generating a random day between 1 and 28, avoiding February 29 issue
         day=$((1 + RANDOM % 28))
+        # formatting date correctly
         date=$(printf "%04d-%02d-%02d" $year $month $day)
         printf "%d %s %s %s %d %s %s %s\n" "$citizen_id" "$first_name" "$last_name" "$country" "$age" "$virus" "$vaccinated" "$date" >> "$OUTPUT_FILE"
     else
         vaccinated="NO"
+        # if not vaccinated, a record without the date is written to the file
         printf "%d %s %s %s %d %s %s\n" "$citizen_id" "$first_name" "$last_name" "$country" "$age" "$virus" "$vaccinated" >> "$OUTPUT_FILE"
     fi
 done
 
+# message upon success
 echo "Generated $NUM_RECORDS records in $OUTPUT_FILE"
