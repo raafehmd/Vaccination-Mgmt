@@ -5,7 +5,7 @@ CC = gcc
 TARGET = vaccinationManager
 
 # listing all source (.c) files
-SRCS = main.c bloom_filter.c skip_list.c
+SRCS = src/main.c src/bloom_filter.c src/skip_list.c
 
 # converting source (.c) files to object (.o) files
 OBJS = $(SRCS:.c=.o)
@@ -28,7 +28,7 @@ $(TARGET): $(OBJS)
 	$(CC) -c $< -o $@
 
 # path to generate_data.sh file
-DATAGEN = generate_data.sh
+DATAGEN = D:\repo\Vaccination-mgmt\generate_data.sh
 
 # command to run generate_data.sh
 generate:
