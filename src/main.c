@@ -188,7 +188,7 @@ void check_vaccination_status(char *citizen_id, const char *virus_name)
             }
             else
             {
-               printf("MAYBE (False positive from Bloom Filter)\n");
+               printf("False positive from Bloom Filter\n");
             }
          }
          else
