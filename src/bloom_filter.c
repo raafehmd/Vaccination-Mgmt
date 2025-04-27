@@ -6,6 +6,7 @@ vaccination records management system.
 // importing relevant libraries
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "bloom_filter.h"
 
 // implementing bloom_create(...) to create a new bloom filter structure
@@ -19,7 +20,7 @@ BloomFilter *bloom_create(unsigned int size)
    if (filter == NULL)
    {
       printf("Error while creating bloom filter");
-      return -1;
+      return NULL;
    }
 
    filter->size = size;
