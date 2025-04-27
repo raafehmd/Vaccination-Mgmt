@@ -24,7 +24,7 @@ A C program for managing vaccination records using **Bloom Filters** and **Skip 
 1. **Generate Test Data**
 
    ```
-   make generate  # Creates inputRecords.txt with 1000 sample records
+   make generate     # Creates inputRecords.txt with 1000 sample records
    ```
 
 2. **Build Program**
